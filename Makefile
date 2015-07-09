@@ -76,6 +76,9 @@ directories: ${OUTDIR}
 ${OUTDIR}:
 	${MKDIR_P} ${OUTDIR}
 
+run: bin/kernel.bin
+	qemu-system-i386 -cdrom forwardos.iso
+
 clean:
 	rm *.iso src/*.o
 	rm -rf bin isodir
