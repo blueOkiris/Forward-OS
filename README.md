@@ -8,5 +8,9 @@ Use as you wish.
 ## Installation
 ```bash
 $ sudo apt-get install xorriso build-essential qemu nasm 
-$ sudo ./build.sh
+$ make
+```
+## Usage
+```bash
+$ qemu-system-i386 -cdrom forwardos.iso
 ```
