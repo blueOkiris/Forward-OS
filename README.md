@@ -5,7 +5,8 @@ Based off of the kernel development series by Arjun Sreedharan, the kernel devel
 
 Use as you wish.
 
-** To Build, you need to:
-	-upgrade grub
-	-sudo apt-get install xorriso build-essential qemu nasm
-	-sudo ./build.sh
+## Installation
+```bash
+$ sudo apt-get install xorriso build-essential qemu nasm 
+$ sudo ./build.sh
+```
