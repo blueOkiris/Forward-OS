@@ -39,7 +39,7 @@ int main() {
 	text_color(LIGHT_GRAY, BLACK);
 	is_cmd_off();
 	
-	while(1) ;
+	while(is_running) ;
 	
-	return;
+	return 0;
 }

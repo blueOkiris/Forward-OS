@@ -25,6 +25,8 @@ char command[80*25];
 int cmd_ind = 0;
 int is_cmd = 0;
 
+int is_running=1;
+
 int pt_s = 0;
 int is_shift = 0;
 int strt = 1;
@@ -96,6 +98,8 @@ void run_command() {
 		putsln(">>> print text   :: print out a piece of text");
 		putsln(">>> println text :: print out a piece of text with a line");
 		putsln(">>> help         :: show help command");
+	} else if(str_startswith(command, "exit") == 1) {
+		exit_system();
 	} else {
 		puts(">>> Unknown command: ");
 		putsln(command);
@@ -354,4 +358,9 @@ unsigned short *memsetw(unsigned short *dest, unsigned short val, int count)
     unsigned short *temp = (unsigned short *)dest;
     for( ; count != 0; count--) *temp++ = val;
     return dest;
+}
+
+void exit_system()
+{
+	is_running=0;
 }
