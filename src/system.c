@@ -97,6 +97,7 @@ void run_command() {
 		putsln(">>> cc fb|help   :: change text color - (fore, back)");
 		putsln(">>> print text   :: print out a piece of text");
 		putsln(">>> println text :: print out a piece of text with a line");
+		putsln(">>> exit         :: exit system");
 		putsln(">>> help         :: show help command");
 	} else if(str_startswith(command, "exit") == 1) {
 		exit_system();
