@@ -63,7 +63,7 @@ void run_command() {
 			putnumln(reg[letti(command[9])]);
 	} else if(str_startswith(command, "printv")) {
 		if(letti(command[7]) != -1)
-			putnumln(reg[letti(command[7])]);
+			putnum(reg[letti(command[7])]);
 	} else if(str_startswith(command, "print")) {
 		putss(command, 6, size);
 	} else if (str_startswith(command, "clear")) {
@@ -157,13 +157,18 @@ void run_command() {
 int atoi(char *str) {
 	int res = 0; // Initialize result
 	int i = 0;
+	
+	int is_negative = 1;
+	
 	while(str[i] != '\0') {
 		if(str[i] - '0' < 10 && str[i] - '0' >= 0) {
 			res = res*10 + str[i] - '0';
+		} else if(str[i] == '-') {
+			is_negative = -1;
 		}
 		i++;
 	}
-	return res;
+	return res*is_negative;
 }
 
 int letti(char let) {
