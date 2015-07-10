@@ -29,8 +29,7 @@ int pt_s = 0;
 int is_shift = 0;
 int strt = 1;
 
-int rega = 0;
-int regb = 0;
+int reg[26];
 
 void clear_command() {
 	int i = 0;
@@ -59,40 +58,44 @@ void run_command() {
 		halt();
 	} else if(str_startswith(command, "println")) {
 		putslns(command, 8, size);
-	} else if(str_startswith(command, "printaln")) {
-		putnumln(rega);
-	} else if(str_startswith(command, "printa")) {
-		putnum(rega);
+	} else if(str_startswith(command, "printvln")) {
+		if(letti(command[9]) != -1)
+			putnumln(reg[letti(command[9])]);
+	} else if(str_startswith(command, "printv")) {
+		if(letti(command[7]) != -1)
+			putnumln(reg[letti(command[7])]);
 	} else if(str_startswith(command, "print")) {
 		putss(command, 6, size);
 	} else if (str_startswith(command, "clear")) {
 		clear_screen();
-    } else if(str_startswith(command, "seta")) {
-		int i = 0;
-		while(i < 5) {
-			command[i] = ' ';
-			i++;
+		index = 0;
+    } else if(str_startswith(command, "setv")) {
+		if(letti(command[5]) != -1) {
+			int r = letti(command[5]);
+			
+			int i = 0;
+			while(i < 7) {
+				command[i] = ' ';
+				i++;
+			}
+			
+			reg[r] = atoi(command);
 		}
-		
-		rega = atoi(command);
-	} else if(str_startswith(command, "setb")) {
-		int i = 0;
-		while(i < 5) {
-			command[i] = ' ';
-			i++;
-		}
-		
-		regb = atoi(command);
 	} else if(str_startswith(command, "add")) {
-		rega += regb;
+		if(letti(command[4])!=-1 && letti(command[6])!=-1)
+			reg[letti(command[4])] += reg[letti(command[6])];
 	} else if(str_startswith(command, "sub")) {
-		rega -= regb;
+		if(letti(command[4])!=-1 && letti(command[6])!=-1)
+			reg[letti(command[4])] -= reg[letti(command[6])];
 	} else if(str_startswith(command, "mul")) {
-		rega = rega*regb;
+		if(letti(command[4])!=-1 && letti(command[6])!=-1)
+			reg[letti(command[4])] *= reg[letti(command[6])];
 	} else if(str_startswith(command, "div")) {
-		rega = rega / regb;
+		if(letti(command[4])!=-1 && letti(command[6])!=-1)
+			reg[letti(command[4])] /= reg[letti(command[6])];
 	} else if(str_startswith(command, "mod")) {
-		rega = rega % regb;
+		if(letti(command[4])!=-1 && letti(command[6])!=-1)
+			reg[letti(command[4])] %= reg[letti(command[6])];
 	} else if(str_startswith(command, "cc") == 1) {
 		if(str_startswith(command, "cc help")) {
 			putsln("Colors:");
@@ -129,16 +132,16 @@ void run_command() {
 		putsln(">>> hlt          :: halts cpu");
 		putsln(">>> cc fb|help   :: change text color - (fore, back)");
 		putsln(">>> print text   :: print out a piece of text");
-		putsln(">>> printa       :: print out the value of a");
-		putsln(">>> printaln     :: print out the value of a with a line after");
+		putsln(">>> printv let   :: print out the value of variable let");
+		putsln(">>> printvln let :: print out the value of variable let with a line after");
 		putsln(">>> println text :: print out a piece of text with a line");
 		putsln(">>> clear        :: Clears the screen");
-		putsln(">>> seta|b value :: set register a or b to value");
-		putsln(">>> add          :: adds a to b and stores in a");
-		putsln(">>> sub          :: subtracts b from a and stores in a");
-		putsln(">>> mul          :: multiplies a by by and stores in a");
-		putsln(">>> div          :: divides a by b and stores in a");
-		putsln(">>> mod          :: divides a by b and stores remainder in a");
+		putsln(">>> setv let val :: set variable let to val");
+		putsln(">>> add base set :: adds base to set and stores in base");
+		putsln(">>> sub base set :: subtracts base from set and stores in base");
+		putsln(">>> mul base set :: multiplies base by set and stores in base");
+		putsln(">>> div base set :: divides base by set and stores in set");
+		putsln(">>> mod base set :: divides base by set and stores remainder in set");
 		putsln(">>> println text :: print out a piece of text with a line");
 		putsln(">>> help         :: show help command");
 	} else {
@@ -161,6 +164,91 @@ int atoi(char *str) {
 		i++;
 	}
 	return res;
+}
+
+int letti(char let) {
+	switch(let) {
+		case 'a':
+			return 0;
+		break;
+		case 'b':
+			return 1;
+		break;
+		case 'c':
+			return 2;
+		break;
+		case 'd':
+			return 3;
+		break;
+		case 'e':
+			return 4;
+		break;
+		case 'f':
+			return 5;
+		break;
+		case 'g':
+			return 6;
+		break;
+		case 'h':
+			return 7;
+		break;
+		case 'i':
+			return 8;
+		break;
+		case 'j':
+			return 9;
+		break;
+		case 'k':
+			return 10;
+		break;
+		case 'l':
+			return 11;
+		break;
+		case 'm':
+			return 12;
+		break;
+		case 'n':
+			return 13;
+		break;
+		case 'o':
+			return 14;
+		break;
+		case 'p':
+			return 15;
+		break;
+		case 'q':
+			return 16;
+		break;
+		case 'r':
+			return 17;
+		break;
+		case 's':
+			return 18;
+		break;
+		case 't':
+			return 19;
+		break;
+		case 'u':
+			return 20;
+		break;
+		case 'v':
+			return 21;
+		break;
+		case 'w':
+			return 22;
+		break;
+		case 'x':
+			return 23;
+		break;
+		case 'y':
+			return 24;
+		break;
+		case 'z':
+			return 25;
+		break;
+	}
+	
+	return -1;
 }
 
 void putnum(int num) {
