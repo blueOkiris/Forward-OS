@@ -31,6 +31,9 @@ int pt_s = 0;
 int is_shift = 0;
 int strt = 1;
 
+int rega = 0;
+int regb = 0;
+
 void clear_command() {
 	int i = 0;
 	while(i < 80*25) {
@@ -58,8 +61,38 @@ void run_command() {
 		halt();
 	} else if(str_startswith(command, "println")) {
 		putslns(command, 8, size);
+	} else if(str_startswith(command, "printaln")) {
+		putnumln(rega);
+	} else if(str_startswith(command, "printa")) {
+		putnum(rega);
 	} else if(str_startswith(command, "print")) {
 		putss(command, 6, size);
+	} else if(str_startswith(command, "seta")) {
+		int i = 0;
+		while(i < 5) {
+			command[i] = ' ';
+			i++;
+		}
+		
+		rega = atoi(command);
+	} else if(str_startswith(command, "setb")) {
+		int i = 0;
+		while(i < 5) {
+			command[i] = ' ';
+			i++;
+		}
+		
+		regb = atoi(command);
+	} else if(str_startswith(command, "add")) {
+		rega += regb;
+	} else if(str_startswith(command, "sub")) {
+		rega -= regb;
+	} else if(str_startswith(command, "mul")) {
+		rega = rega*regb;
+	} else if(str_startswith(command, "div")) {
+		rega = rega / regb;
+	} else if(str_startswith(command, "mod")) {
+		rega = rega % regb;
 	} else if(str_startswith(command, "cc") == 1) {
 		if(str_startswith(command, "cc help")) {
 			putsln("Colors:");
@@ -96,6 +129,15 @@ void run_command() {
 		putsln(">>> hlt          :: halts cpu");
 		putsln(">>> cc fb|help   :: change text color - (fore, back)");
 		putsln(">>> print text   :: print out a piece of text");
+		putsln(">>> printa       :: print out the value of a");
+		putsln(">>> printaln     :: print out the value of a with a line after");
+		putsln(">>> println text :: print out a piece of text with a line");
+		putsln(">>> seta|b value :: set register a or b to value");
+		putsln(">>> add          :: adds a to b and stores in a");
+		putsln(">>> sub          :: subtracts b from a and stores in a");
+		putsln(">>> mul          :: multiplies a by by and stores in a");
+		putsln(">>> div          :: divides a by b and stores in a");
+		putsln(">>> mod          :: divides a by b and stores remainder in a");
 		putsln(">>> println text :: print out a piece of text with a line");
 		putsln(">>> exit         :: exit system");
 		putsln(">>> help         :: show help command");
@@ -115,10 +157,64 @@ int atoi(char *str) {
 	int res = 0; // Initialize result
 	int i = 0;
 	while(str[i] != '\0') {
-		res = res*10 + str[i] - '0';
+		if(str[i] - '0' < 10 && str[i] - '0' >= 0) {
+			res = res*10 + str[i] - '0';
+		}
 		i++;
 	}
 	return res;
+}
+
+void putnum(int num) {
+	int res = num;
+	
+    if (res==0) 
+		putch('0');
+    else {
+        if (res<0) { 
+			putch('-');
+			res=-res; 
+		}
+		
+        /*Largest num is `2,147,483,64(7|8)`*/
+        char temp[10];
+        int i = 0;
+        do {
+            temp[i++] = res%10 + '0';
+            res /= 10;
+        } while(res);
+		
+        while (--i>=0) {
+            putch(temp[i]);
+        }
+    }
+}
+
+void putnumln(int num) {
+	int res = num;
+	
+    if (res==0) 
+		putch('0');
+    else {
+        if (res<0) { 
+			putch('-');
+			res=-res; 
+		}
+		
+        /*Largest num is `2,147,483,64(7|8)`*/
+        char temp[10];
+        int i = 0;
+        do {
+            temp[i++] = res%10 + '0';
+            res /= 10;
+        } while(res);
+		
+        while (--i>=0) {
+            putch(temp[i]);
+        }
+    }
+	
+	putsln("");
 }
 
 char get_attr(int ind) {
