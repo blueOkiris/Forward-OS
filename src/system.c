@@ -25,8 +25,6 @@ char command[80*25];
 int cmd_ind = 0;
 int is_cmd = 0;
 
-int is_running=1;
-
 int pt_s = 0;
 int is_shift = 0;
 int strt = 1;
@@ -67,7 +65,9 @@ void run_command() {
 		putnum(rega);
 	} else if(str_startswith(command, "print")) {
 		putss(command, 6, size);
-	} else if(str_startswith(command, "seta")) {
+	} else if (str_startswith(command, "clear")) {
+		clear_screen();
+    } else if(str_startswith(command, "seta")) {
 		int i = 0;
 		while(i < 5) {
 			command[i] = ' ';
@@ -132,6 +132,7 @@ void run_command() {
 		putsln(">>> printa       :: print out the value of a");
 		putsln(">>> printaln     :: print out the value of a with a line after");
 		putsln(">>> println text :: print out a piece of text with a line");
+		putsln(">>> clear        :: Clears the screen");
 		putsln(">>> seta|b value :: set register a or b to value");
 		putsln(">>> add          :: adds a to b and stores in a");
 		putsln(">>> sub          :: subtracts b from a and stores in a");
@@ -139,10 +140,7 @@ void run_command() {
 		putsln(">>> div          :: divides a by b and stores in a");
 		putsln(">>> mod          :: divides a by b and stores remainder in a");
 		putsln(">>> println text :: print out a piece of text with a line");
-		putsln(">>> exit         :: exit system");
 		putsln(">>> help         :: show help command");
-	} else if(str_startswith(command, "exit") == 1) {
-		exit_system();
 	} else {
 		puts(">>> Unknown command: ");
 		putsln(command);
@@ -455,9 +453,4 @@ unsigned short *memsetw(unsigned short *dest, unsigned short val, int count)
     unsigned short *temp = (unsigned short *)dest;
     for( ; count != 0; count--) *temp++ = val;
     return dest;
-}
-
-void exit_system()
-{
-	is_running=0;
 }
