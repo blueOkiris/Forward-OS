@@ -16,7 +16,7 @@
 # ############################################################################ #
 
 CC = gcc
-CFLAGS = -m32 -c -w
+CFLAGS = -m32 -c -w -fno-stack-protector
 ASM = nasm
 ASMFLAGS = -f elf32
 LINK = ld
