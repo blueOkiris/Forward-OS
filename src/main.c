@@ -1,7 +1,7 @@
 /* *************************************************************************** */
 /*    This file is part of Forward OS.                                         */
 /*                                                                             */
-/*    Batch Interpret is free software: you can redistribute it and/or modify  */
+/*    Forward OS is free software: you can redistribute it and/or modify       */
 /*    it under the terms of the GNU General Public License as published by     */
 /*    the Free Software Foundation, either version 3 of the License, or        */
 /*    (at your option) any later version.                                      */
@@ -39,7 +39,7 @@ int main() {
 	text_color(LIGHT_GRAY, BLACK);
 	is_cmd_off();
 	
-	while(1) ;
+	while(is_running) ;
 	
-	return;
+	return 0;
 }

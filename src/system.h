@@ -1,7 +1,7 @@
 /* *************************************************************************** */
 /*    This file is part of Forward OS.                                         */
 /*                                                                             */
-/*    Batch Interpret is free software: you can redistribute it and/or modify  */
+/*    Forward OS is free software: you can redistribute it and/or modify       */
 /*    it under the terms of the GNU General Public License as published by     */
 /*    the Free Software Foundation, either version 3 of the License, or        */
 /*    (at your option) any later version.                                      */
@@ -96,5 +96,8 @@ extern void keyboard_install();
 extern void irq_install_handler(int irq, void (*handler)(struct regs *r));
 extern void irq_uninstall_handler(int irq);
 extern void irq_install();
+
+int is_running;
+void exit_system();
 
 #endif

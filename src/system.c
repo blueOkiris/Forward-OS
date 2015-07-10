@@ -1,7 +1,7 @@
 /* *************************************************************************** */
 /*    This file is part of Forward OS.                                         */
 /*                                                                             */
-/*    Batch Interpret is free software: you can redistribute it and/or modify  */
+/*    Forward OS is free software: you can redistribute it and/or modify       */
 /*    it under the terms of the GNU General Public License as published by     */
 /*    the Free Software Foundation, either version 3 of the License, or        */
 /*    (at your option) any later version.                                      */
@@ -24,6 +24,8 @@ int term_ind = 10;
 char command[80*25];
 int cmd_ind = 0;
 int is_cmd = 0;
+
+int is_running=1;
 
 int pt_s = 0;
 int is_shift = 0;
@@ -96,6 +98,8 @@ void run_command() {
 		putsln(">>> print text   :: print out a piece of text");
 		putsln(">>> println text :: print out a piece of text with a line");
 		putsln(">>> help         :: show help command");
+	} else if(str_startswith(command, "exit") == 1) {
+		exit_system();
 	} else {
 		puts(">>> Unknown command: ");
 		putsln(command);
@@ -354,4 +358,9 @@ unsigned short *memsetw(unsigned short *dest, unsigned short val, int count)
     unsigned short *temp = (unsigned short *)dest;
     for( ; count != 0; count--) *temp++ = val;
     return dest;
+}
+
+void exit_system()
+{
+	is_running=0;
 }
