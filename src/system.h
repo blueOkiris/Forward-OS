@@ -15,6 +15,8 @@
 /*    along with Batch Interpret. If not, see <http://www.gnu.org/licenses/>.  */
 /* *************************************************************************** */
 
+
+// Just used for defining all functions so everything can be used
 #ifndef __SYSTEM.H
 #define __SYSTEM.H
 

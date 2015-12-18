@@ -17,6 +17,7 @@
 
 #include "system.h"
 
+// Video memory is located at 0xb8000
 char *vidptr = (char*)0xb8000;
 int index = 0;
 char attr = 0x07;
@@ -31,6 +32,8 @@ int strt = 1;
 
 int reg[26];
 
+// Methods for resetting after a new line
+//(and restricting reset if needed)
 void clear_command() {
 	int i = 0;
 	while(i < 80*25) {
@@ -40,35 +43,74 @@ void clear_command() {
 	
 	cmd_ind = 0;
 }
-
 void is_cmd_on() {
 	is_cmd = 1;
 }
-
 void is_cmd_off() {
 	is_cmd = 0;
 }
 
+// Main function for executing terminal commands
+// All commands with arguments require 1 space in between opcode and argument
 void run_command() {
 	is_cmd = 1;
 	int size = str_len(command);
+	
+	// halts the cpu
 	if(str_startswith(command, "hlt") == 1) {
 		text_color(BLACK, BLACK);
 		clear_screen();
 		halt();
-	} else if(str_startswith(command, "println")) {
+	}
+	/* prints out string next to it with a new line
+	 * EX:
+	 * println Hello, world!!
+	 * OUTPUT:
+	 * 	Hello, world!!
+	 *
+	 */
+	else if(str_startswith(command, "println")) {
 		putslns(command, 8, size);
-	} else if(str_startswith(command, "printvln")) {
+	} 
+	/* prints the value of the variable next to command and adds a newline
+	 * EX:
+	 * assume register a is equal to "Hello, world!!"
+	 * printvln a
+	 * OUTPUT:
+	 * Hello, world!!
+	 *
+	 */
+	else if(str_startswith(command, "printvln")) {
 		if(letti(command[9]) != -1)
 			putnumln(reg[letti(command[9])]);
+	/* prints the value of the variable next to command
+	 * EX:
+	 * assume register a is equal to "Hello, world!!"
+	 * printv a
+	 * OUTPUT:
+	 * Hello, world!!
+	 */
 	} else if(str_startswith(command, "printv")) {
 		if(letti(command[7]) != -1)
 			putnum(reg[letti(command[7])]);
+	/* prints the value of the string next to command
+	 * EX:
+	 * print Hello, world!!
+	 * OUTPUT:
+	 * Hello, world!!
+	 */
 	} else if(str_startswith(command, "print")) {
 		putss(command, 6, size);
+	// Clears all previous text from the screen
 	} else if (str_startswith(command, "clear")) {
 		clear_screen();
 		index = 0;
+	/* Sets variable after command to value after var name
+	 * EX:
+	 * setv a Hello, world!!
+	 * WHAT IT DOES:
+	 * variable a now has the value of "Hello, world!!";
+	 */
     } else if(str_startswith(command, "setv")) {
 		if(letti(command[5]) != -1) {
 			int r = letti(command[5]);
@@ -154,6 +196,7 @@ void run_command() {
 	is_cmd = 0;
 }
 
+// Convert a string to an int;
 int atoi(char *str) {
 	int res = 0; // Initialize result
 	int i = 0;
@@ -165,12 +208,15 @@ int atoi(char *str) {
 			res = res*10 + str[i] - '0';
 		} else if(str[i] == '-') {
 			is_negative = -1;
+		} else {
+			//print_error("Error parsing string!!");
 		}
 		i++;
 	}
 	return res*is_negative;
 }
 
+// Converts register input (letter) into index value (reg)
 int letti(char let) {
 	switch(let) {
 		case 'a':
@@ -253,6 +299,8 @@ int letti(char let) {
 		break;
 	}
 	
+	// Adds error message if incorrect kind of variable
+	//print_error("Error: Unknown register ");
 	return -1;
 }
 
