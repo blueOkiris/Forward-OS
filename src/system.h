@@ -16,7 +16,7 @@
 /* *************************************************************************** */
 
 
-// Just used for defining all functions so everything can be used
+// Just used for defining all functions so everything can be used from everywhere
 #ifndef __SYSTEM.H
 #define __SYSTEM.H
 

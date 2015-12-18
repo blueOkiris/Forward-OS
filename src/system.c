@@ -198,7 +198,7 @@ void run_command() {
 
 // Convert a string to an int;
 int atoi(char *str) {
-	int res = 0; // Initialize result
+	int res = 0; // result
 	int i = 0;
 	
 	int is_negative = 1;
@@ -209,7 +209,10 @@ int atoi(char *str) {
 		} else if(str[i] == '-') {
 			is_negative = -1;
 		} else {
-			//print_error("Error parsing string!!");
+			// Error handling for if it doesn't work
+			putsln("Error: String parsing - Value will be 0!");
+			res = 0;
+			break;
 		}
 		i++;
 	}
@@ -299,11 +302,12 @@ int letti(char let) {
 		break;
 	}
 	
-	// Adds error message if incorrect kind of variable
-	//print_error("Error: Unknown register ");
+	// Adds error message if not lower case letter
+	putsln("Error: Unknown register - Nothing will be set!!");
 	return -1;
 }
 
+// Prints the value of a number
 void putnum(int num) {
 	int res = num;
 	
@@ -319,6 +323,12 @@ void putnum(int num) {
         char temp[10];
         int i = 0;
         do {
+			if(i >= 9) {
+				// If number exceeds 10 digits
+				putsln("Error: Number too large - will only be 10 digits");
+				break;
+			}
+			
             temp[i++] = res%10 + '0';
             res /= 10;
         } while(res);
@@ -329,37 +339,19 @@ void putnum(int num) {
     }
 }
 
+// Prints the value of a number and an end line
 void putnumln(int num) {
-	int res = num;
-	
-    if (res==0) 
-		putch('0');
-    else {
-        if (res<0) { 
-			putch('-');
-			res=-res; 
-		}
-		
-        /*Largest num is `2,147,483,64(7|8)`*/
-        char temp[10];
-        int i = 0;
-        do {
-            temp[i++] = res%10 + '0';
-            res /= 10;
-        } while(res);
-		
-        while (--i>=0) {
-            putch(temp[i]);
-        }
-    }
+	putnum(num);
 	
 	putsln("");
 }
 
+// Gets the attribute (color and back) at video memory address
 char get_attr(int ind) {
 	return vidptr[ind*2+1];
 }
 
+// returns the length of a string
 int str_len(char *str) {
 	int i = 0;
 	while(str[i] != '\0') {
@@ -368,6 +360,7 @@ int str_len(char *str) {
 	return i;
 }
 
+// initializes the terminal
 void set_up_terminal() {
 	char c = attr;
 	text_color(RED, BLACK);
@@ -377,6 +370,7 @@ void set_up_terminal() {
 	attr = c;
 }
 
+// Prints a single character to the screen at the next place (scrolls)
 void putch(char c) {
 	scroll(c);
 	
@@ -453,14 +447,17 @@ void putch(char c) {
 	}
 }
 
+// Returns the character at a position in memory
 char getch(int ind) {
 	return vidptr[ind];
 }
 
+// sets the color at a position in video memory
 void text_color(unsigned char forecolor, unsigned char backcolor) {
 	attr = (backcolor << 4) | (forecolor & 0x0F);
 }
 
+// Determines if a string starts with another string
 int str_startswith(char *one, char *two) {
 	int ol = str_len(one);
 	int tl = str_len(two);
@@ -479,6 +476,7 @@ int str_startswith(char *one, char *two) {
 	}
 }
 
+// Clears out the video memory
 void clear_screen(void)
 {
 	int i = 0;
@@ -490,6 +488,7 @@ void clear_screen(void)
 	}
 }
 
+// Writes out a string to the screen
 void puts(char *str) {
 	pt_s = 1;
 	int length = str_len(str);
@@ -501,6 +500,7 @@ void puts(char *str) {
 	pt_s = 0;
 }
 
+// Writes out a string to the screen with a new line
 void putsln(char *str) {
 	pt_s = 1;
 	int length = str_len(str);
@@ -515,6 +515,7 @@ void putsln(char *str) {
 	pt_s = 0;
 }
 
+// Print out a substring
 void putss(char *str, int beg, int end) {
 	pt_s = 1;
 	int i = beg;
@@ -525,6 +526,7 @@ void putss(char *str, int beg, int end) {
 	pt_s = 0;
 }
 
+// Print out a substring and a line
 void putslns(char *str, int beg, int end) {
 	pt_s = 1;
 	int i = beg;
@@ -538,6 +540,7 @@ void putslns(char *str, int beg, int end) {
 	pt_s = 0;
 }
 
+// Sets the position of the next character
 void move_cursor(int col, int row) {
 	unsigned short position=(row*80) + col;
 	
@@ -549,6 +552,12 @@ void move_cursor(int col, int row) {
 	write_port(0x3D5, (unsigned char )((position>>8)&0xFF));
  }
 
+/* Complex code for scrolling line
+ * Deletes top line
+ * Moves every character back to the ength of that line (start of second line becomes start of first line)
+ * Clears bottom line
+ * Moves cursor to the start of the bottom line
+ */
 void scroll(char c)
 {
     if(index >= 80*25*2) {
@@ -574,6 +583,7 @@ void scroll(char c)
 	}
 }
 
+// Basic functions for memory manipulation
 void *memcpy(void *dest, const void *src, int count)
 {
     const char *sp = (const char *)src;
@@ -581,14 +591,12 @@ void *memcpy(void *dest, const void *src, int count)
     for(; count != 0; count--) *dp++ = *sp++;
     return dest;
 }
-
 void *memset(void *dest, char val, int count)
 {
     char *temp = (char *)dest;
     for( ; count != 0; count--) *temp++ = val;
     return dest;
 }
-
 unsigned short *memsetw(unsigned short *dest, unsigned short val, int count)
 {
     unsigned short *temp = (unsigned short *)dest;

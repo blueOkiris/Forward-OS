@@ -15,6 +15,7 @@
 /*    along with Batch Interpret. If not, see <http://www.gnu.org/licenses/>.  */
 /* *************************************************************************** */
 
+// A Map that places all the keys at proper indexes for input from keyboard port
 unsigned char keyboard_map[128] =
 {
     0,  27, '1', '2', '3', '4', '5', '6', '7', '8',	/* 9 */
@@ -37,15 +38,15 @@ unsigned char keyboard_map[128] =
     0,	/* 69 - Num lock*/
     0,	/* Scroll Lock */
     0,	/* Home key */
-    0,	/* Up Arrow */
+    1,	/* Up Arrow */
     0,	/* Page Up */
   '-',
-    0,	/* Left Arrow */
+    3,	/* Left Arrow */
     0,
-    0,	/* Right Arrow */
+    4,	/* Right Arrow */
   '+',
     0,	/* 79 - End key*/
-    0,	/* Down Arrow */
+    2,	/* Down Arrow */
     0,	/* Page Down */
     0,	/* Insert Key */
     0,	/* Delete Key */

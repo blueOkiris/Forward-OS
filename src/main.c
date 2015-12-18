@@ -17,8 +17,11 @@
 
 #include "system.h"
 
+// Message to display at startup
 const char *welcome_str = "Welcome to Forward OS!!\n";
 
+// Method called from assembly to start OS
+// Calls all initiallizing methods
 int main() {
 	gdt_install();
     idt_install();
